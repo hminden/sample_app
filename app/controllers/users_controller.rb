@@ -13,13 +13,14 @@ class UsersController < ApplicationController
 	def index
 		@title = "All users"
 		@users = User.paginate(:page => params[:page])
+		
 
 	end
 
 	def show
 		@user = User.find(params[:id])
 		@title = @user.name
-
+		@microposts = @user.microposts.paginate(:page => params[:page])
 	end
 
 	def create
@@ -61,10 +62,7 @@ class UsersController < ApplicationController
 	
 
 	private
-		def authenticate
-			deny_access unless signed_in?
-		end
-	
+		
 		def correct_user
 			@user = User.find(params[:id])
 			redirect_to(root_path) unless current_user?(@user)
